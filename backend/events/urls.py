@@ -2,8 +2,8 @@ from django.urls import path
 from .views import (
     EventListView,
     EventDetailView,
-    EventRegisterView,
 )
+from registrations.views import EventRegisterView
 
 urlpatterns = [
     path('', EventListView.as_view()),

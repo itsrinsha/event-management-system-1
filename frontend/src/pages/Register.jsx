@@ -21,6 +21,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.username || !formData.email || !formData.password) {
+      alert("Please fill all fields");
+      return;
+    }
+
     try {
       await api.post("register/", formData);
 
@@ -44,6 +49,7 @@ function Register() {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
+          required
         />
 
         <br /><br />
@@ -54,6 +60,7 @@ function Register() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          required
         />
 
         <br /><br />
@@ -64,6 +71,8 @@ function Register() {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          required
+          minLength="8"
         />
 
         <br /><br />
