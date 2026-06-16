@@ -321,39 +321,44 @@ npm run dev
 
 ### Login Experience
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6a2dd530-b9d4-45c2-a34f-8469b4a5a467" />
+<img width="1914" height="878" alt="image" src="https://github.com/user-attachments/assets/89fde924-eb1f-4496-beb0-5abb0e28ee25" />
+
 
 ### Register Experience
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/260c1943-df8c-4d35-b4ea-451794898a3c" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7c533924-d93b-4119-b78a-bf0570cbe606" />
+<img width="1904" height="871" alt="image" src="https://github.com/user-attachments/assets/8e1a4091-7d54-46aa-ba49-2e4f65437430" />
+<img width="1919" height="882" alt="image" src="https://github.com/user-attachments/assets/d1ee493b-2ec6-40b5-aefa-362f094bf337" />
 
 ### Event Discovery
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9db46a13-f15d-4559-941b-77a440128cc2" />
+<img width="1916" height="886" alt="image" src="https://github.com/user-attachments/assets/d75a386d-3c91-4b57-877d-2496ded5b306" />
+<img width="1913" height="865" alt="image" src="https://github.com/user-attachments/assets/4253f602-2dda-461e-be79-d5104d916484" />
 
 
 ### Event Details
+<img width="1919" height="870" alt="image" src="https://github.com/user-attachments/assets/d9c9ab5c-8213-4877-a5de-779469ddc377" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/11763722-f2a0-4acc-8b8e-91fb1364aa63" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ec9c7ea5-9d42-476b-acee-d86c763b5fe6" />
+<img width="1919" height="880" alt="image" src="https://github.com/user-attachments/assets/cd4e06b2-0574-46d1-9331-d93fb0f8e4df" />
+<img width="1915" height="871" alt="image" src="https://github.com/user-attachments/assets/4a4b6481-7cf1-4553-b1d3-b9ebc9f15e7f" />
 
 
 
 ### User Timeline
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/46b4a3ee-fb98-4f8e-8509-cf3da8abbb09" />
+<img width="1919" height="887" alt="image" src="https://github.com/user-attachments/assets/720beb25-a5a5-447f-88e8-92e7bd8773cb" />
+<img width="1883" height="857" alt="image" src="https://github.com/user-attachments/assets/3ebd0979-48fb-4a8c-b303-cea80ff088cb" />
+
 
 
 ### Admin Dashboard
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a1b298b1-c59f-4bfe-915d-0e379a14aa6c" />
+<img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/241564dd-e334-47ce-a74a-28709dcb2629" />
+<img width="1919" height="864" alt="image" src="https://github.com/user-attachments/assets/613b994c-d3ad-4761-a96c-1ddc706203ad" />
+<img width="1913" height="871" alt="image" src="https://github.com/user-attachments/assets/20da5319-a827-4e89-8533-e82e1a852fbf" />
+<img width="1919" height="882" alt="image" src="https://github.com/user-attachments/assets/3ecc891e-cd92-4fec-8035-6037cf91ac9a" />
+<img width="1918" height="874" alt="image" src="https://github.com/user-attachments/assets/531578cd-0417-48d2-bf0c-6eb3fed96d36" />
+<img width="1919" height="879" alt="image" src="https://github.com/user-attachments/assets/9d64f081-ab60-4d04-b9fe-0c71cc835729" />
+<img width="1919" height="880" alt="image" src="https://github.com/user-attachments/assets/637996eb-cc36-44a8-9bd7-972cae724531" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/bf2c3837-1154-408c-b0fb-8ba7c813a10c" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/642ccc23-3c5c-4894-b4c2-dd7148be4c77" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/63b2058c-c27a-4629-bb7d-681730ea35ef" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d879cd0d-1e24-473d-ad91-e9b4d39634cf" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8aec94c8-6881-40ad-99c9-621db18b8d91" />
 
 ---
 
