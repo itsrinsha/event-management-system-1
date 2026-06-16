@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'accounts',
     'events',
     'registrations',
-     "corsheaders",
 ]
 
 MIDDLEWARE = [
