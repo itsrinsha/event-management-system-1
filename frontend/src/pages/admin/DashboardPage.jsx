@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getDashboardStats } from '../../api/admin';
-import Loader from '../../components/Loader';
+import Loader from '../../components/common/Loader';
 
 const DashboardPage = () => {
   const [stats, setStats] = useState(null);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
-import EventCard from '../components/EventCard';
-import Loader from '../components/Loader';
-import Button from '../components/Button';
+import api from '../../api/axios';
+import EventCard from '../../components/features/EventCard';
+import Loader from '../../components/common/Loader';
+import Button from '../../components/common/Button';
 import { gsap } from 'gsap';
 
 const EventListing = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createEvent } from '../../api/events';
-import EventForm from '../../components/EventForm';
+import EventForm from '../../components/features/EventForm';
 
 const CreateEventPage = () => {
   const navigate = useNavigate();

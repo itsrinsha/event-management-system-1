@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../api';
-import InputField from '../components/InputField';
-import Button from '../components/Button';
-import Loader from '../components/Loader';
+import api from '../../api/axios';
+import InputField from '../../components/common/InputField';
+import Button from '../../components/common/Button';
+import Loader from '../../components/common/Loader';
 import { gsap } from 'gsap';
 
 const Auth = ({ mode }) => {
@@ -199,7 +199,7 @@ const Auth = ({ mode }) => {
                 />
                 <div className="pt-4">
                   <Button type="submit" fullWidth size="lg" disabled={loginLoading}>
-                    {loginLoading ? <Loader size="sm" /> : 'Access Account'}
+                    {loginLoading ? <Loader size="sm" /> : 'Sign In'}
                   </Button>
                 </div>
               </form>
@@ -262,7 +262,7 @@ const Auth = ({ mode }) => {
                 />
                 <div className="pt-4">
                   <Button type="submit" fullWidth size="lg" disabled={registerLoading}>
-                    {registerLoading ? <Loader size="sm" /> : 'Initialize Profile'}
+                    {registerLoading ? <Loader size="sm" /> : 'Create Account'}
                   </Button>
                 </div>
               </form>

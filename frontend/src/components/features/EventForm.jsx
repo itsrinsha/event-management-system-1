@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import InputField from './InputField';
-import Button from './Button';
-import Loader from './Loader';
-import ImageUploader from './ImageUploader';
+import InputField from '../common/InputField';
+import Button from '../common/Button';
+import Loader from '../common/Loader';
+import ImageUploader from '../common/ImageUploader';
 
 const EventForm = ({ initialData = {}, onSubmit, loading }) => {
   const [formData, setFormData] = useState({
@@ -97,7 +97,7 @@ const EventForm = ({ initialData = {}, onSubmit, loading }) => {
 
       <div className="pt-8 border-t border-border flex justify-end">
         <Button type="submit" size="lg" disabled={loading}>
-          {loading ? <Loader size="sm" /> : 'Commit Record'}
+          {loading ? <Loader size="sm" /> : 'Upload Event'}
         </Button>
       </div>
     </form>

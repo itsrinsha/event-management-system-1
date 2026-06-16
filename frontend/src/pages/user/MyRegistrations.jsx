@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
-import Loader from '../components/Loader';
-import Button from '../components/Button';
+import api from '../../api/axios';
+import Loader from '../../components/common/Loader';
+import Button from '../../components/common/Button';
 import { gsap } from 'gsap';
 
 const MyRegistrations = () => {

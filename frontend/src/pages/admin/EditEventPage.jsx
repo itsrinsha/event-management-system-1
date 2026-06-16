@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEvent, updateEvent } from '../../api/events';
-import EventForm from '../../components/EventForm';
-import Loader from '../../components/Loader';
+import EventForm from '../../components/features/EventForm';
+import Loader from '../../components/common/Loader';
 
 const EditEventPage = () => {
   const { id } = useParams();

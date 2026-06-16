@@ -12,7 +12,7 @@ const Button = ({
   icon = null,
 }) => {
   const base =
-    'group relative overflow-hidden inline-flex items-center justify-center gap-4 font-medium tracking-[0.2em] uppercase focus:outline-none transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]';
+    'group relative overflow-hidden inline-flex items-center justify-center gap-4 font-medium tracking-[0.2em] focus:outline-none transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]';
 
   const sizes = {
     sm: 'text-[10px] px-6 py-3',

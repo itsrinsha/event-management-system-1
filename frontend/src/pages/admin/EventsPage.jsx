@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getEvents, deleteEvent } from '../../api/events';
-import Loader from '../../components/Loader';
-import DeleteModal from '../../components/DeleteModal';
+import Loader from '../../components/common/Loader';
+import DeleteModal from '../../components/features/DeleteModal';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);

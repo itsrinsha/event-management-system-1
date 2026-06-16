@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../api';
-import Button from '../components/Button';
-import Loader from '../components/Loader';
+import api from '../../api/axios';
+import Button from '../../components/common/Button';
+import Loader from '../../components/common/Loader';
 import { gsap } from 'gsap';
 
 const EventDetail = () => {

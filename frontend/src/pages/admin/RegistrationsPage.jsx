@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getRegistrations } from '../../api/admin';
-import Loader from '../../components/Loader';
+import Loader from '../../components/common/Loader';
 
 const RegistrationsPage = () => {
   const [registrations, setRegistrations] = useState([]);

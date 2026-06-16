@@ -2,16 +2,16 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // Public/User Components
-import Navbar from './components/Navbar';
-import Auth from './pages/Auth';
-import EventListing from './pages/EventListing';
-import EventDetail from './pages/EventDetail';
-import MyRegistrations from './pages/MyRegistrations';
-import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/layout/Navbar';
+import Auth from './pages/auth/Auth';
+import EventListing from './pages/user/EventListing';
+import EventDetail from './pages/user/EventDetail';
+import MyRegistrations from './pages/user/MyRegistrations';
+import ProtectedRoute from './components/routes/ProtectedRoute';
 
 // Admin Components
-import AdminRoute from './components/AdminRoute';
-import AdminLayout from './components/AdminLayout';
+import AdminRoute from './components/routes/AdminRoute';
+import AdminLayout from './components/layout/AdminLayout';
 import DashboardPage from './pages/admin/DashboardPage';
 import EventsPage from './pages/admin/EventsPage';
 import CreateEventPage from './pages/admin/CreateEventPage';
