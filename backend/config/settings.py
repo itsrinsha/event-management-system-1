@@ -71,7 +71,7 @@ ROOT_URLCONF = 'config.urls'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://event-management-system-1-e4msrrcti-itsrinshas-projects.vercel.app/"
+    "https://event-management-system-1-e4msrrcti-itsrinshas-projects.vercel.app"
 ]
 
 TEMPLATES = [
