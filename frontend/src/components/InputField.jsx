@@ -11,11 +11,11 @@ const InputField = ({
   error = '',
 }) => {
   return (
-    <div className="relative group w-full">
+    <div className="mb-8 relative group">
       {label && (
         <label
           htmlFor={id}
-          className="block text-[10px] font-medium text-secondary uppercase tracking-[0.2em] mb-1.5"
+          className="block text-[10px] font-medium text-secondary uppercase tracking-[0.2em] mb-3"
         >
           {label}
         </label>
