@@ -103,10 +103,10 @@ const EventDetail = () => {
   });
 
   const placeholders = [
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=2020&auto=format&fit=crop&grayscale=true'
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=2020&auto=format&fit=crop'
   ];
   const image = event.image || placeholders[(event.id || event.pk || 1) % placeholders.length];
 
@@ -116,7 +116,7 @@ const EventDetail = () => {
       {/* ─── Immersive Hero ─── */}
       <div className="relative w-full h-[80vh] overflow-hidden flex flex-col justify-end p-8 md:p-16 lg:p-24">
         <div 
-          className="detail-hero-image absolute inset-0 z-0 bg-cover bg-center grayscale opacity-80"
+          className="detail-hero-image absolute inset-0 z-0 bg-cover bg-center opacity-80"
           style={{ backgroundImage: `url('${image}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />

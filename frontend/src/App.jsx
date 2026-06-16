@@ -1,37 +1,95 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
-import EventListing from "./pages/EventListing";
-import Auth from "./pages/Auth";
-import EventDetail from "./pages/EventDetail";
-import MyRegistrations from "./pages/MyRegistrations";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-function App() {
+// Public/User Components
+import Navbar from './components/Navbar';
+import Auth from './pages/Auth';
+import EventListing from './pages/EventListing';
+import EventDetail from './pages/EventDetail';
+import MyRegistrations from './pages/MyRegistrations';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Admin Components
+import AdminRoute from './components/AdminRoute';
+import AdminLayout from './components/AdminLayout';
+import DashboardPage from './pages/admin/DashboardPage';
+import EventsPage from './pages/admin/EventsPage';
+import CreateEventPage from './pages/admin/CreateEventPage';
+import EditEventPage from './pages/admin/EditEventPage';
+import RegistrationsPage from './pages/admin/RegistrationsPage';
+
+const App = () => {
   return (
-    <BrowserRouter>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<EventListing />} />
-            <Route path="/events" element={<EventListing />} />
-            <Route path="/login" element={<Auth mode="login" />} />
-            <Route path="/register" element={<Auth mode="register" />} />
-            <Route path="/events/:id" element={<EventDetail />} />
-            <Route 
-              path="/my-registrations" 
-              element={
-                <ProtectedRoute>
-                  <MyRegistrations />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+    <Router>
+      <Routes>
+        {/* PUBLIC ROUTES (with standard Navbar) */}
+        <Route 
+          path="/" 
+          element={
+            <>
+              <Navbar />
+              <EventListing />
+            </>
+          } 
+        />
+        <Route 
+          path="/events" 
+          element={<Navigate to="/" replace />} 
+        />
+        <Route 
+          path="/events/:id" 
+          element={
+            <>
+              <Navbar />
+              <EventDetail />
+            </>
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={
+            <>
+              <Navbar />
+              <Auth mode="login" />
+            </>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <>
+              <Navbar />
+              <Auth mode="register" />
+            </>
+          } 
+        />
+
+        {/* PROTECTED USER ROUTES */}
+        <Route 
+          path="/my-registrations" 
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <MyRegistrations />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* ADMIN ROUTES (with dedicated AdminLayout) */}
+        <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="events/create" element={<CreateEventPage />} />
+          <Route path="events/edit/:id" element={<EditEventPage />} />
+          <Route path="registrations" element={<RegistrationsPage />} />
+        </Route>
+
+        {/* CATCH ALL */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

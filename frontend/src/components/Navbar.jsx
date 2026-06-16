@@ -15,21 +15,26 @@ const Navbar = () => {
 
   const isActive = (path) =>
     location.pathname === path ||
-    (path === '/' && location.pathname === '/events');
+    (path === '/events' && location.pathname === '/');
 
-  const navLink = (path, label) => (
-    <Link
-      to={path}
-      onClick={() => setMobileOpen(false)}
-      className={`text-[12px] font-medium uppercase tracking-[0.15em] px-2 py-1 transition-opacity duration-500
-        ${isActive(path)
-          ? 'text-primary opacity-100'
-          : 'text-primary opacity-40 hover:opacity-100'
-        }`}
-    >
-      {label}
-    </Link>
-  );
+  const navLink = (path, label) => {
+    const active = isActive(path);
+    return (
+      <Link
+        to={path}
+        onClick={() => setMobileOpen(false)}
+        className="relative group text-[12px] font-medium uppercase tracking-[0.15em] px-2 py-1 transition-colors duration-500"
+        style={{ color: active ? '#111111' : '#999999' }}
+      >
+        {label}
+        {/* Subtle Underline Animation */}
+        <span 
+          className={`absolute left-0 bottom-0 h-[1px] bg-[#111111] transition-all duration-500 
+            ${active ? 'w-full' : 'w-0 group-hover:w-full'}`}
+        />
+      </Link>
+    );
+  };
 
   return (
     <nav
@@ -47,8 +52,8 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-10">
-            {navLink('/', 'Experiences')}
-            {token && navLink('/my-registrations', 'My Timeline')}
+            {navLink('/events', 'Events')}
+            {token && navLink('/my-registrations', 'My Registrations')}
           </div>
 
           {/* Desktop Auth */}
@@ -92,8 +97,8 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden absolute w-full h-screen bg-background top-full left-0 z-40 flex flex-col justify-center items-center gap-8">
-          {navLink('/', 'Experiences')}
-          {token && navLink('/my-registrations', 'My Timeline')}
+          {navLink('/events', 'Events')}
+          {token && navLink('/my-registrations', 'My Registrations')}
           <div className="w-12 h-px bg-border my-4" />
           {token ? (
             <button

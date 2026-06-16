@@ -71,7 +71,6 @@ const Login = () => {
               Provide credentials to access registry.
             </p>
           </div>
-
           {error && (
             <div className="mb-6 px-4 py-3 rounded-none bg-accent-light border border-border text-[12px] text-primary flex flex-col gap-1 animate-fade-in-up">
               <span className="font-semibold tracking-wider uppercase text-[10px]">NOTICE //</span>

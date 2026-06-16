@@ -14,10 +14,10 @@ const EventCard = ({ event, isRegistered, index = 0 }) => {
   
   // High-end placeholder images mapped by ID/index for variety
   const placeholders = [
-    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop&grayscale=true',
-    'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=2020&auto=format&fit=crop&grayscale=true'
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=2020&auto=format&fit=crop'
   ];
   
   const image = event.image || placeholders[index % placeholders.length];
@@ -32,7 +32,7 @@ const EventCard = ({ event, isRegistered, index = 0 }) => {
         {/* Left: Image (Massive) */}
         <div className="w-full md:w-[60%] lg:w-[65%] h-[50vh] md:h-[70vh] overflow-hidden relative">
           <div 
-            className="absolute inset-0 bg-cover bg-center grayscale transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
             style={{ backgroundImage: `url('${image}')` }}
           />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700" />

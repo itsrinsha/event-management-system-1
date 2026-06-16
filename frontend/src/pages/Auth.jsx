@@ -47,8 +47,16 @@ const Auth = ({ mode }) => {
     try {
       const response = await api.post('/login/', loginData);
       const token = response.data.access || response.data.token;
+      const isStaff = response.data.is_staff === true;
+      
       localStorage.setItem('token', token);
-      navigate('/');
+      localStorage.setItem('is_staff', isStaff);
+      
+      if (isStaff) {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/events');
+      }
     } catch (err) {
       setLoginError(
         err.response?.data?.detail || 'Invalid credentials.'
@@ -120,10 +128,10 @@ const Auth = ({ mode }) => {
   const isLogin = mode === 'login';
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-background overflow-hidden relative">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-background relative">
       
       {/* LEFT SIDE: Imagery & Headline */}
-      <div className="relative w-full md:w-1/2 lg:w-[55%] h-[40vh] md:h-screen bg-black overflow-hidden flex flex-col justify-end p-8 md:p-16 lg:p-24">
+      <div className="relative w-full md:w-1/2 lg:w-[55%] h-[40vh] md:h-screen md:sticky md:top-0 bg-black overflow-hidden flex flex-col justify-end p-8 md:p-16 lg:p-24 shrink-0">
         {/* Background Image */}
         <div 
           ref={imageRef}
@@ -152,10 +160,10 @@ const Auth = ({ mode }) => {
       </div>
 
       {/* RIGHT SIDE: Minimal Form */}
-      <div className="w-full md:w-1/2 lg:w-[45%] h-[60vh] md:h-screen flex items-center justify-center p-8 md:p-16 lg:p-24 bg-background">
+      <div className="w-full md:w-1/2 lg:w-[45%] min-h-[60vh] md:min-h-screen flex items-center justify-center p-8 py-16 md:p-16 lg:p-24 bg-background">
         <div ref={formContainerRef} className="w-full max-w-md">
           
-          <div className="mb-16">
+          <div className="mb-8">
             <h2 className="text-[24px] md:text-[32px] font-medium tracking-tight mb-2">
               {isLogin ? "Sign In" : "Register"}
             </h2>
@@ -164,13 +172,13 @@ const Auth = ({ mode }) => {
 
           {isLogin ? (
             /* LOGIN FORM */
-            <div className="space-y-8">
+            <div className="flex flex-col w-full">
               {loginError && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest mb-6">
                   {loginError}
                 </div>
               )}
-              <form onSubmit={handleLoginSubmit} className="space-y-10">
+              <form onSubmit={handleLoginSubmit} className="space-y-5">
                 <InputField
                   id="username"
                   label="Username"
@@ -189,13 +197,13 @@ const Auth = ({ mode }) => {
                   onChange={handleLoginChange}
                   required
                 />
-                <div className="pt-4">
+                <div className="pt-3">
                   <Button type="submit" fullWidth size="lg" disabled={loginLoading}>
                     {loginLoading ? <Loader size="sm" /> : 'Access Account'}
                   </Button>
                 </div>
               </form>
-              <div className="mt-12 text-[12px] text-secondary tracking-widest uppercase">
+              <div className="mt-6 text-[12px] text-secondary tracking-widest uppercase">
                 New here?
                 <Link to="/register" className="text-primary font-medium hover:opacity-50 transition-opacity ml-2">
                   Create Profile
@@ -204,18 +212,18 @@ const Auth = ({ mode }) => {
             </div>
           ) : (
             /* REGISTER FORM */
-            <div className="space-y-8">
+            <div className="flex flex-col w-full">
               {registerError && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest mb-6">
                   {registerError}
                 </div>
               )}
               {registerSuccess && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest mb-6">
                   {registerSuccess}
                 </div>
               )}
-              <form onSubmit={handleRegisterSubmit} className="space-y-8">
+              <form onSubmit={handleRegisterSubmit} className="space-y-5">
                 <InputField
                   id="username"
                   label="Username"
@@ -252,13 +260,13 @@ const Auth = ({ mode }) => {
                   onChange={handleRegisterChange}
                   required
                 />
-                <div className="pt-4">
+                <div className="pt-3">
                   <Button type="submit" fullWidth size="lg" disabled={registerLoading}>
                     {registerLoading ? <Loader size="sm" /> : 'Initialize Profile'}
                   </Button>
                 </div>
               </form>
-              <div className="mt-12 text-[12px] text-secondary tracking-widest uppercase">
+              <div className="mt-6 text-[12px] text-secondary tracking-widest uppercase">
                 Already a member?
                 <Link to="/login" className="text-primary font-medium hover:opacity-50 transition-opacity ml-2">
                   Sign In
