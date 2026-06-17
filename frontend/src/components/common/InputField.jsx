@@ -1,48 +1,29 @@
 import React from 'react';
 
-const InputField = ({
-  label,
-  id,
-  type = 'text',
-  value,
-  onChange,
-  placeholder,
-  required = false,
-  error = '',
+const InputField = ({ 
+  label, 
+  id, 
+  error, 
+  className = '', 
+  ...props 
 }) => {
   return (
-    <div className="mb-8 relative group">
+    <div className={`space-y-2 w-full ${className}`}>
       {label && (
-        <label
-          htmlFor={id}
-          className="block text-[10px] font-medium text-secondary uppercase tracking-[0.2em] mb-3"
+        <label 
+          htmlFor={id} 
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground"
         >
           {label}
         </label>
       )}
-      
-      <div className="relative">
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          required={required}
-          className={`w-full py-3 bg-transparent text-[14px] text-primary placeholder-border border-0 border-b outline-none transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
-            ${error
-              ? 'border-primary'
-              : 'border-border focus:border-primary'
-            }`}
-        />
-        {/* Animated thin focus sweep line - pure black */}
-        <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-focus-within:w-full" />
-      </div>
-
+      <input
+        id={id}
+        className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors ${error ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+        {...props}
+      />
       {error && (
-        <p className="mt-3 text-[10px] text-primary tracking-widest uppercase">
-          {error}
-        </p>
+        <p className="text-[13px] font-medium text-destructive mt-1.5">{error}</p>
       )}
     </div>
   );

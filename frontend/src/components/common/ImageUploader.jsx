@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { UploadCloud, Image as ImageIcon } from 'lucide-react';
 
 const ImageUploader = ({ onChange, currentImage }) => {
   const [preview, setPreview] = useState(currentImage || null);
@@ -30,22 +31,22 @@ const ImageUploader = ({ onChange, currentImage }) => {
   };
 
   return (
-    <div className="w-full">
-      <label className="block text-[10px] font-semibold tracking-[0.2em] uppercase text-secondary mb-3">
+    <div className="w-full space-y-2">
+      <label className="text-sm font-medium leading-none text-foreground">
         Cover Image (Optional)
       </label>
       <div 
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`relative border border-dashed transition-colors duration-300 flex flex-col items-center justify-center p-8 min-h-[200px] cursor-pointer group ${
-          isDragging ? 'border-primary bg-subtle' : 'border-border hover:border-primary'
+        className={`relative flex flex-col items-center justify-center p-8 min-h-[200px] cursor-pointer rounded-lg border-2 border-dashed transition-all duration-300 overflow-hidden group ${
+          isDragging ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/50 hover:bg-muted/50'
         }`}
       >
         <input 
           type="file" 
           accept="image/jpeg, image/png, image/webp" 
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
               handleFile(e.target.files[0]);
@@ -54,19 +55,23 @@ const ImageUploader = ({ onChange, currentImage }) => {
         />
         
         {preview ? (
-          <div className="absolute inset-0 p-2">
-            <img src={preview} alt="Preview" className="w-full h-full object-cover object-center transition-all duration-700" />
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-              <span className="text-white text-[10px] uppercase tracking-widest">Replace Image</span>
+          <div className="absolute inset-0 p-1">
+            <img src={preview} alt="Preview" className="w-full h-full object-cover rounded-md" />
+            <div className="absolute inset-1 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-md pointer-events-none">
+              <span className="text-white text-sm font-medium tracking-wide flex items-center gap-2">
+                <UploadCloud size={16} /> Replace Image
+              </span>
             </div>
           </div>
         ) : (
-          <div className="text-center">
-            <svg className="mx-auto h-8 w-8 text-secondary mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-[12px] font-medium text-primary">Drag & drop high-res imagery</p>
-            <p className="text-[10px] text-secondary mt-2 tracking-wide">JPG, PNG, WEBP</p>
+          <div className="text-center space-y-4">
+            <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+              <ImageIcon className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">Click or drag & drop</p>
+              <p className="text-xs text-muted-foreground mt-1">SVG, PNG, JPG or GIF (max. 5MB)</p>
+            </div>
           </div>
         )}
       </div>

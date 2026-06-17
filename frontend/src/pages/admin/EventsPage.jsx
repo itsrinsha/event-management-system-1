@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getEvents, deleteEvent } from '../../api/events';
+import { useNavigate } from 'react-router-dom';
+import api from '../../api/axios';
 import Loader from '../../components/common/Loader';
+import Button from '../../components/common/Button';
 import DeleteModal from '../../components/features/DeleteModal';
+import { Edit2, Trash2, Search, Plus } from 'lucide-react';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // Delete modal state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
 
+  const navigate = useNavigate();
+
   const fetchEvents = async () => {
-    setLoading(true);
     try {
-      const response = await getEvents();
+      const response = await api.get('/events/');
       const data = response.data.results || response.data;
       setEvents(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError('Failed to load events directory.');
+      setError('Failed to fetch events directory.');
     } finally {
       setLoading(false);
     }
@@ -31,98 +36,116 @@ const EventsPage = () => {
 
   const openDeleteModal = (event) => {
     setEventToDelete(event);
-    setDeleteModalOpen(true);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setEventToDelete(null);
   };
 
   const confirmDelete = async () => {
     if (!eventToDelete) return;
-    
     try {
-      await deleteEvent(eventToDelete.id);
-      setEvents(events.filter(e => e.id !== eventToDelete.id));
+      await api.delete(`/admin/events/${eventToDelete.id || eventToDelete.pk}/`);
+      setEvents(events.filter(e => (e.id || e.pk) !== (eventToDelete.id || eventToDelete.pk)));
+      closeDeleteModal();
     } catch (err) {
-      alert("Failed to delete the record.");
-    } finally {
-      setDeleteModalOpen(false);
-      setEventToDelete(null);
+      alert(err.response?.data?.detail || 'Deletion failed. Check permissions.');
     }
   };
 
-  if (loading) return <div className="py-24 flex justify-center"><Loader size="lg" /></div>;
-  if (error) return <div className="py-24 text-center text-[14px] text-primary">{error}</div>;
+  const filteredEvents = events.filter(e => 
+    (e.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (e.location || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="animate-fade-in-up">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-border pb-8 gap-6">
+    <div className="p-6 md:p-10 max-w-7xl mx-auto animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-[32px] md:text-[48px] font-light text-primary tracking-tight mb-2 uppercase">
-            Directory
-          </h1>
-          <p className="text-[14px] text-secondary">Manage and curate active experiences.</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-2">Events Directory</h1>
+          <p className="text-sm text-muted-foreground">Manage and orchestrate platform experiences.</p>
         </div>
-        <Link 
-          to="/admin/events/create" 
-          className="inline-flex items-center justify-center px-6 py-3 bg-primary text-background text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-neutral-800 transition-colors"
-        >
-          Initialize Event
-        </Link>
+        <Button onClick={() => navigate('/admin/events/create')} className="gap-2">
+          <Plus size={16} /> Initialize Event
+        </Button>
       </div>
 
-      <div className="w-full overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr>
-              <th className="border-b border-border py-4 px-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-secondary">ID</th>
-              <th className="border-b border-border py-4 px-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-secondary">Title</th>
-              <th className="border-b border-border py-4 px-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-secondary">Date & Time</th>
-              <th className="border-b border-border py-4 px-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-secondary">Location</th>
-              <th className="border-b border-border py-4 px-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-secondary text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-[14px]">
-            {events.length === 0 ? (
-              <tr>
-                <td colSpan="5" className="py-8 text-center text-secondary italic text-[12px]">
-                  No records exist in the directory.
-                </td>
-              </tr>
-            ) : (
-              events.map((event) => (
-                <tr key={event.id} className="border-b border-border hover:bg-subtle transition-colors group">
-                  <td className="py-6 px-4 text-secondary font-mono text-[12px]">
-                    {(event.id || event.pk).toString().padStart(4, '0')}
-                  </td>
-                  <td className="py-6 px-4 font-medium text-primary">{event.title}</td>
-                  <td className="py-6 px-4 text-secondary">
-                    {event.date} <span className="opacity-50 mx-1">|</span> {event.time}
-                  </td>
-                  <td className="py-6 px-4 text-secondary">{event.location}</td>
-                  <td className="py-6 px-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="flex justify-end gap-4">
-                      <Link 
-                        to={`/admin/events/edit/${event.id}`}
-                        className="text-[10px] font-semibold tracking-[0.15em] uppercase text-primary hover:opacity-50 transition-opacity"
-                      >
-                        Modify
-                      </Link>
-                      <button 
-                        onClick={() => openDeleteModal(event)}
-                        className="text-[10px] font-semibold tracking-[0.15em] uppercase text-error hover:opacity-50 transition-opacity"
-                      >
-                        Purge
-                      </button>
-                    </div>
-                  </td>
+      <div className="card-premium rounded-xl overflow-hidden flex flex-col">
+        {/* Table Header / Toolbar */}
+        <div className="p-4 border-b border-border bg-muted/30 flex items-center gap-4">
+          <div className="relative max-w-sm w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <input 
+              type="text"
+              placeholder="Search by title or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+          </div>
+        </div>
+
+        {/* Table Content */}
+        <div className="overflow-x-auto">
+          {loading ? (
+            <div className="py-20 flex justify-center"><Loader /></div>
+          ) : error ? (
+            <div className="p-8 text-center text-destructive text-sm font-medium">{error}</div>
+          ) : filteredEvents.length === 0 ? (
+            <div className="p-16 text-center text-muted-foreground text-sm">
+              No events match your criteria.
+            </div>
+          ) : (
+            <table className="w-full text-left text-sm whitespace-nowrap">
+              <thead className="bg-muted/50 text-muted-foreground font-medium uppercase tracking-wider text-xs">
+                <tr>
+                  <th className="px-6 py-4">Event ID / Title</th>
+                  <th className="px-6 py-4">Date</th>
+                  <th className="px-6 py-4">Location</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredEvents.map((event) => (
+                  <tr key={event.id || event.pk} className="hover:bg-muted/30 transition-colors group">
+                    <td className="px-6 py-4">
+                      <p className="font-semibold text-foreground">{event.title}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">#{event.id || event.pk}</p>
+                    </td>
+                    <td className="px-6 py-4 text-foreground/80">{event.date || event.start_time}</td>
+                    <td className="px-6 py-4 text-foreground/80">{event.location || 'Online'}</td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          onClick={() => navigate(`/admin/events/edit/${event.id || event.pk}`)}
+                        >
+                          <Edit2 size={16} />
+                        </Button>
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          onClick={() => openDeleteModal(event)}
+                          className="text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
 
       <DeleteModal 
-        isOpen={deleteModalOpen} 
-        onClose={() => setDeleteModalOpen(false)} 
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
         onConfirm={confirmDelete}
         title={eventToDelete?.title}
       />

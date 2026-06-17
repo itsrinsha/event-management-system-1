@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getEvent, updateEvent } from '../../api/events';
+import { useParams, useNavigate } from 'react-router-dom';
+import api from '../../api/axios';
 import EventForm from '../../components/features/EventForm';
 import Loader from '../../components/common/Loader';
+import { ArrowLeft } from 'lucide-react';
 
 const EditEventPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [initialData, setInitialData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [eventData, setEventData] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await getEvent(id);
-        setEventData(response.data);
+        const response = await api.get(`/events/${id}/`);
+        setInitialData(response.data);
       } catch (err) {
-        setError('Failed to load event data. Record may not exist.');
+        setError('Failed to fetch event data. It may have been removed.');
       } finally {
         setLoading(false);
       }
@@ -26,45 +27,54 @@ const EditEventPage = () => {
     fetchEvent();
   }, [id]);
 
-  const handleSubmit = async (formData) => {
-    setSubmitting(true);
+  const handleUpdate = async (formData) => {
+    setSaving(true);
     setError('');
 
-    const data = new FormData();
-    data.append('title', formData.title);
-    data.append('description', formData.description);
-    data.append('date', formData.date);
-    data.append('time', formData.time);
-    data.append('location', formData.location);
-    if (formData.image instanceof File) {
-      data.append('image', formData.image);
-    }
-
     try {
-      await updateEvent(id, data);
+      const data = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (key === 'image' && typeof formData[key] === 'string') {
+          // Skip if it's the existing image URL
+          return;
+        }
+        if (formData[key] !== null && formData[key] !== undefined) {
+          data.append(key, formData[key]);
+        }
+      });
+
+      await api.patch(`/admin/events/${id}/`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       navigate('/admin/events');
     } catch (err) {
-      setError('Failed to modify event. Please verify all fields.');
+      setError(
+        err.response?.data?.detail || 
+        'Validation failed. Please verify the provided data.'
+      );
     } finally {
-      setSubmitting(false);
+      setSaving(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24">
+      <div className="flex items-center justify-center min-h-[400px]">
         <Loader size="lg" />
       </div>
     );
   }
 
-  if (error && !eventData) {
+  if (error && !initialData) {
     return (
-      <div className="text-center py-24">
-        <p className="text-[14px] text-primary">{error}</p>
+      <div className="p-8 text-center text-destructive bg-destructive/10 border border-destructive/20 rounded-lg max-w-lg mx-auto mt-12">
+        <p className="font-medium mb-4">{error}</p>
         <button 
           onClick={() => navigate('/admin/events')}
-          className="mt-6 text-[12px] font-medium uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+          className="text-sm font-medium hover:underline underline-offset-4"
         >
           Return to Directory
         </button>
@@ -73,24 +83,29 @@ const EditEventPage = () => {
   }
 
   return (
-    <div className="animate-fade-in-up">
-      <div className="mb-12 border-b border-border pb-8">
-        <h1 className="text-[32px] md:text-[48px] font-light text-primary tracking-tight mb-2 uppercase">
-          Modify Record
-        </h1>
-        <p className="text-[14px] text-secondary">Update the parameters of this existing experience.</p>
+    <div className="p-6 md:p-10 max-w-4xl mx-auto animate-fade-in-up">
+      <button 
+        onClick={() => navigate('/admin/events')}
+        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
+      >
+        <ArrowLeft size={16} /> Directory
+      </button>
+
+      <div className="mb-8">
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-2">Modify Experience</h1>
+        <p className="text-sm text-muted-foreground">Update details for {initialData.title}.</p>
       </div>
 
       {error && (
-        <div className="mb-8 border-l-2 border-primary pl-4 py-2 text-[12px] text-primary uppercase tracking-widest bg-accent-light">
+        <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-md font-medium">
           {error}
         </div>
       )}
 
       <EventForm 
-        initialData={eventData} 
-        onSubmit={handleSubmit} 
-        loading={submitting} 
+        initialData={initialData} 
+        onSubmit={handleUpdate} 
+        loading={saving} 
       />
     </div>
   );

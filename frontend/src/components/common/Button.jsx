@@ -1,50 +1,40 @@
 import React from 'react';
 
-const Button = ({
-  children,
-  onClick,
-  type = 'button',
-  disabled = false,
-  variant = 'primary',
-  className = '',
+const Button = ({ 
+  children, 
+  variant = 'primary', 
+  size = 'md', 
   fullWidth = false,
-  size = 'md',
-  icon = null,
+  className = '',
+  disabled = false,
+  ...props 
 }) => {
-  const base =
-    'group relative overflow-hidden inline-flex items-center justify-center gap-4 font-medium tracking-[0.2em] focus:outline-none transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]';
-
-  const sizes = {
-    sm: 'text-[10px] px-6 py-3',
-    md: 'text-[11px] px-8 py-4',
-    lg: 'text-[12px] px-10 py-5',
-  };
-
+  const baseClasses = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  
   const variants = {
-    primary:
-      'bg-primary text-white border border-primary hover:bg-neutral-900',
-    secondary:
-      'bg-transparent text-primary border border-border hover:border-primary',
-    ghost:
-      'bg-transparent text-primary opacity-60 hover:opacity-100 hover:tracking-[0.25em]',
-    danger:
-      'bg-transparent text-primary border border-border hover:bg-neutral-50',
+    primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
   };
-
-  const sweepClass = variant === 'primary' ? 'sweep-overlay' : 'sweep-overlay-dark';
-
+  
+  const sizes = {
+    sm: "h-9 px-3 text-xs rounded-md",
+    md: "h-10 px-4 py-2 text-sm rounded-md",
+    lg: "h-11 px-8 text-base rounded-md",
+    icon: "h-10 w-10 rounded-md",
+  };
+  
+  const widthClass = fullWidth ? "w-full" : "";
+  
   return (
-    <button
-      type={type}
-      onClick={onClick}
+    <button 
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`}
       disabled={disabled}
-      className={`${base} ${sizes[size]} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${disabled ? 'opacity-30 pointer-events-none' : ''} ${className}`}
+      {...props}
     >
-      {/* Light Sweep Highlight Overlay */}
-      {variant !== 'ghost' && <span className={sweepClass} />}
-
-      {icon && <span className="relative z-10 flex-shrink-0 transition-transform duration-500 group-hover:scale-110">{icon}</span>}
-      <span className="relative z-10">{children}</span>
+      {children}
     </button>
   );
 };

@@ -3,7 +3,7 @@ import api from '../../api/axios';
 import EventCard from '../../components/features/EventCard';
 import Loader from '../../components/common/Loader';
 import Button from '../../components/common/Button';
-import { gsap } from 'gsap';
+import { Search } from 'lucide-react';
 
 const EventListing = () => {
   const [events, setEvents] = useState([]);
@@ -33,112 +33,73 @@ const EventListing = () => {
       (e.location || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  useEffect(() => {
-    gsap.fromTo('.hero-reveal', 
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'cubic-bezier(0.25, 1, 0.5, 1)' }
-    );
-  }, []);
-
-  useEffect(() => {
-    if (!loading && filteredEvents.length > 0) {
-      gsap.fromTo('.event-reveal',
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1.2, 
-          stagger: 0.15, 
-          ease: 'cubic-bezier(0.25, 1, 0.5, 1)',
-          delay: 0.2
-        }
-      );
-    }
-  }, [loading, searchQuery, filteredEvents.length]);
-
   return (
     <div className="bg-background min-h-screen">
 
-      {/* ─── Cinematic Hero ─── */}
-      <section className="relative w-full h-[85vh] min-h-[600px] flex flex-col justify-center px-8 md:px-16 overflow-hidden">
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover grayscale contrast-125"
-        >
-          {/* Architectural Concrete Corridors Video */}
-          <source src="https://cdn.coverr.co/videos/coverr-walking-through-a-concrete-building-5369/1080p.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        
-        {/* Dark Luxury Overlay */}
-        <div className="absolute inset-0 bg-black/50 z-10" />
-
-        {/* Content */}
-        <div className="relative z-20 w-full">
-          <div className="max-w-4xl mt-12 md:mt-24">
-            <span className="hero-reveal block text-[10px] font-medium text-white/60 tracking-[0.2em] uppercase mb-8">
-              Index // Experiences
-            </span>
-            <h1 className="hero-reveal text-[48px] md:text-[80px] lg:text-[100px] font-light text-white leading-[0.9] tracking-tighter mb-12">
-              Discover Curated<br />Experiences.
-            </h1>
-            
-            {/* Search */}
-            <div className="hero-reveal max-w-xl relative mt-16 md:mt-24 group">
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[10px] font-medium tracking-[0.2em] uppercase text-white/70 transition-colors duration-500 group-focus-within:text-white">
-                Search
-              </span>
-              <input
-                type="text"
-                placeholder="Find an event, location, or theme..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-24 pr-4 py-4 bg-transparent text-[14px] text-white placeholder-white/30 border-0 border-b border-white/20 outline-none transition-colors duration-500 focus:border-white"
-              />
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-500 group-focus-within:w-full" />
+      {/* ─── Editorial Hero ─── */}
+      <section 
+        className="relative w-full px-6 md:px-12 lg:px-24 border-b border-border min-h-[600px] lg:min-h-[800px] bg-cover bg-center bg-no-repeat flex flex-col justify-end pb-16 md:pb-24"
+        style={{ backgroundImage: "url('/src/assets/hero-bg.png')" }}
+      >
+        <div className="max-w-5xl mx-auto w-full flex flex-col items-center text-center animate-fade-in-up">
+          {/* Search */}
+          <div className="w-full max-w-xl relative group">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <Search size={20} />
             </div>
+            <input
+              type="text"
+              placeholder="Search by title, location, or theme..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-background/90 backdrop-blur-md border border-input/50 rounded-full text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-lg hover:shadow-xl"
+            />
           </div>
         </div>
       </section>
 
       {/* ─── Catalogue ─── */}
-      <section className="px-8 md:px-16 pb-32">
+      <section className="px-6 md:px-12 lg:px-24 py-16 md:py-24 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-12 border-b border-border pb-6">
+          <h2 className="text-2xl font-semibold tracking-tight">Upcoming Events</h2>
+          <span className="text-sm font-medium text-muted-foreground">
+            {filteredEvents.length} {filteredEvents.length === 1 ? 'Result' : 'Results'}
+          </span>
+        </div>
+
         {loading ? (
-          <div className="py-32 flex justify-center">
+          <div className="py-24 flex justify-center">
             <Loader size="lg" />
           </div>
         ) : error ? (
-          <div className="py-32 text-center max-w-lg mx-auto">
-            <h3 className="text-[12px] font-medium uppercase tracking-[0.2em] text-primary mb-4">
+          <div className="py-24 text-center max-w-lg mx-auto">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Connection Lost
             </h3>
-            <p className="text-[14px] text-secondary mb-8">{error}</p>
-            <Button onClick={() => window.location.reload()} size="lg">
+            <p className="text-sm text-muted-foreground mb-6">{error}</p>
+            <Button onClick={() => window.location.reload()} variant="outline">
               Retry Connection
             </Button>
           </div>
         ) : filteredEvents.length === 0 ? (
-          <div className="py-32 text-center max-w-lg mx-auto">
-            <h3 className="text-[12px] font-medium uppercase tracking-[0.2em] text-primary mb-4">
+          <div className="py-24 text-center max-w-md mx-auto">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+              <Search className="w-8 h-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               No Experiences Found
             </h3>
-            <p className="text-[14px] text-secondary">
+            <p className="text-sm text-muted-foreground">
               {searchQuery
-                ? `No events matched your search for "${searchQuery}".`
+                ? `We couldn't find any events matching "${searchQuery}". Try adjusting your filters.`
                 : 'There are currently no events listed in the directory.'
               }
             </p>
           </div>
         ) : (
-          <div className="w-full mt-16">
-            {filteredEvents.map((event, index) => (
-              <div key={event.id || event.pk} className="event-reveal opacity-0 w-full">
-                <EventCard event={event} index={index} />
-              </div>
+          <div className="flex flex-col animate-fade-in">
+            {filteredEvents.map((event) => (
+              <EventCard key={event.id || event.pk} event={event} />
             ))}
           </div>
         )}

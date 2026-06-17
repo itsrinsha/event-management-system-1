@@ -4,15 +4,9 @@ import api from '../../api/axios';
 import InputField from '../../components/common/InputField';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
-import { gsap } from 'gsap';
 
 const Auth = ({ mode }) => {
   const navigate = useNavigate();
-
-  // Refs for animation
-  const formContainerRef = useRef(null);
-  const headlineRef = useRef(null);
-  const imageRef = useRef(null);
 
   // Login Form State
   const [loginData, setLoginData] = useState({ username: '', password: '' });
@@ -48,14 +42,14 @@ const Auth = ({ mode }) => {
       const response = await api.post('/login/', loginData);
       const token = response.data.access || response.data.token;
       const isStaff = response.data.is_staff === true;
-      
+
       localStorage.setItem('token', token);
       localStorage.setItem('is_staff', isStaff);
-      
+
       if (isStaff) {
         navigate('/admin/dashboard');
       } else {
-        navigate('/events');
+        navigate('/');
       }
     } catch (err) {
       setLoginError(
@@ -89,101 +83,75 @@ const Auth = ({ mode }) => {
     } catch (err) {
       setRegisterError(
         err.response?.data?.detail ||
-          err.response?.data?.username?.[0] ||
-          'Registration failed.'
+        err.response?.data?.username?.[0] ||
+        'Registration failed.'
       );
     } finally {
       setRegisterLoading(false);
     }
   };
 
-  useEffect(() => {
-    // Initial load animation
-    gsap.fromTo(
-      imageRef.current,
-      { scale: 1.05, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1.5, ease: 'power2.out' }
-    );
-    gsap.fromTo(
-      headlineRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, delay: 0.3, ease: 'power3.out' }
-    );
-    gsap.fromTo(
-      formContainerRef.current,
-      { x: 30, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, delay: 0.5, ease: 'power3.out' }
-    );
-  }, []);
-
-  useEffect(() => {
-    // Crossfade forms on mode change
-    gsap.fromTo(
-      formContainerRef.current,
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.6, ease: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-    );
-  }, [mode]);
-
   const isLogin = mode === 'login';
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-background relative">
-      
+
       {/* LEFT SIDE: Imagery & Headline */}
-      <div className="relative w-full md:w-1/2 lg:w-[55%] h-[40vh] md:h-screen md:sticky md:top-0 bg-black overflow-hidden flex flex-col justify-end p-8 md:p-16 lg:p-24 shrink-0">
+      <div className="relative w-full md:w-1/2 lg:w-[55%] h-[40vh] md:h-screen md:sticky md:top-0 bg-black overflow-hidden flex flex-col justify-end p-8 md:p-16 lg:p-24 shrink-0 border-r border-border">
         {/* Background Image */}
-        <div 
-          ref={imageRef}
-          className="absolute inset-0 z-0 bg-cover bg-center grayscale opacity-60"
-          style={{ 
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center opacity-70 mix-blend-luminosity"
+          style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
 
         {/* Statement Headline */}
-        <div ref={headlineRef} className="relative z-20 max-w-xl">
-          <h1 className="text-white text-[40px] md:text-[64px] lg:text-[80px] font-light leading-[0.9] tracking-tighter mb-6">
+        <div className="relative z-20 max-w-xl animate-fade-in-up">
+          <Link to="/" className="text-white font-semibold text-2xl tracking-tighter transition-opacity hover:opacity-80 absolute -top-32 md:-top-64">EventFlow<span className="text-white/50">.</span></Link>
+          <h1 className="text-white text-4xl md:text-5xl lg:text-7xl font-semibold leading-[1.1] tracking-tight mb-6">
             {isLogin ? (
-              <>Discover<br/>Experiences<br/>Worth Attending.</>
+              <>Discover.<br />Experience.<br />Connect.</>
             ) : (
-              <>Join A<br/>Curated<br/>Collection.</>
+              <>Join the<br />Premier<br />Network.</>
             )}
           </h1>
-          <p className="text-white/60 text-[14px] md:text-[16px] font-light tracking-wide max-w-sm">
-            {isLogin 
-              ? "Access your dashboard to manage exclusive events and track your schedule." 
-              : "Initialize your profile to gain access to premium experiences globally."}
+          <p className="text-white/70 text-base font-medium max-w-sm">
+            {isLogin
+              ? "Sign in to access your curated dashboard and upcoming experiences."
+              : "Create an account to gain access to exclusive events globally."}
           </p>
         </div>
       </div>
 
       {/* RIGHT SIDE: Minimal Form */}
-      <div className="w-full md:w-1/2 lg:w-[45%] min-h-[60vh] md:min-h-screen flex items-center justify-center p-8 py-8 md:p-12 lg:p-16 bg-background">
-        <div ref={formContainerRef} className="w-full max-w-md">
-          
-          <div className="mb-8">
-            <h2 className="text-[24px] md:text-[32px] font-medium tracking-tight mb-2">
-              {isLogin ? "Sign In" : "Register"}
+      <div className="w-full md:w-1/2 lg:w-[45%] min-h-[60vh] md:min-h-screen flex items-center justify-center p-8 py-12 md:p-12 lg:p-16 bg-background animate-fade-in">
+        <div className="w-full max-w-sm">
+
+          <div className="mb-10 text-center md:text-left">
+            <h2 className="text-3xl font-semibold tracking-tight text-foreground mb-2">
+              {isLogin ? "Welcome back" : "Create an account"}
             </h2>
-            <div className="h-[1px] w-12 bg-primary mt-4" />
+            <p className="text-sm text-muted-foreground">
+              {isLogin ? "Enter your credentials to access your account." : "Enter your details to get started."}
+            </p>
           </div>
 
           {isLogin ? (
             /* LOGIN FORM */
             <div className="space-y-6">
               {loginError && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-md font-medium">
                   {loginError}
                 </div>
               )}
-              <form onSubmit={handleLoginSubmit} className="space-y-6">
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <InputField
                   id="username"
                   label="Username"
                   type="text"
-                  placeholder="Enter your username"
+                  placeholder="name@example.com"
                   value={loginData.username}
                   onChange={handleLoginChange}
                   required
@@ -192,34 +160,34 @@ const Auth = ({ mode }) => {
                   id="password"
                   label="Password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="••••••••"
                   value={loginData.password}
                   onChange={handleLoginChange}
                   required
                 />
-                <div className="pt-4">
-                  <Button type="submit" fullWidth size="lg" disabled={loginLoading}>
-                    {loginLoading ? <Loader size="sm" /> : 'Sign In'}
+                <div className="pt-2">
+                  <Button type="submit" fullWidth size="md" disabled={loginLoading}>
+                    {loginLoading ? <Loader size="sm" className="text-primary-foreground" /> : 'Sign In'}
                   </Button>
                 </div>
               </form>
-              <div className="mt-8 text-[12px] text-secondary tracking-widest uppercase">
-                New here?
-                <Link to="/register" className="text-primary font-medium hover:opacity-50 transition-opacity ml-2">
-                  Create Profile
+              <div className="mt-8 text-center text-sm text-muted-foreground">
+                Don't have an account? 
+                <Link to="/register" className="text-foreground font-semibold hover:underline underline-offset-4 ml-1">
+                  Sign up
                 </Link>
               </div>
             </div>
           ) : (
             /* REGISTER FORM */
-            <div className="space-y-4">
+            <div className="space-y-6">
               {registerError && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-md font-medium">
                   {registerError}
                 </div>
               )}
               {registerSuccess && (
-                <div className="text-[12px] text-primary border-l-2 border-primary pl-4 py-1 uppercase tracking-widest">
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-sm rounded-md font-medium">
                   {registerSuccess}
                 </div>
               )}
@@ -228,7 +196,7 @@ const Auth = ({ mode }) => {
                   id="username"
                   label="Username"
                   type="text"
-                  placeholder="Choose a username"
+                  placeholder="johndoe"
                   value={registerData.username}
                   onChange={handleRegisterChange}
                   required
@@ -237,39 +205,41 @@ const Auth = ({ mode }) => {
                   id="email"
                   label="Email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="m@example.com"
                   value={registerData.email}
                   onChange={handleRegisterChange}
                   required
                 />
-                <InputField
-                  id="password"
-                  label="Password"
-                  type="password"
-                  placeholder="Create a password"
-                  value={registerData.password}
-                  onChange={handleRegisterChange}
-                  required
-                />
-                <InputField
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  placeholder="Verify your password"
-                  value={registerData.confirmPassword}
-                  onChange={handleRegisterChange}
-                  required
-                />
-                <div className="pt-4">
-                  <Button type="submit" fullWidth size="lg" disabled={registerLoading}>
-                    {registerLoading ? <Loader size="sm" /> : 'Create Account'}
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField
+                    id="password"
+                    label="Password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={registerData.password}
+                    onChange={handleRegisterChange}
+                    required
+                  />
+                  <InputField
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={registerData.confirmPassword}
+                    onChange={handleRegisterChange}
+                    required
+                  />
+                </div>
+                <div className="pt-2">
+                  <Button type="submit" fullWidth size="md" disabled={registerLoading}>
+                    {registerLoading ? <Loader size="sm" className="text-primary-foreground" /> : 'Create Account'}
                   </Button>
                 </div>
               </form>
-              <div className="mt-6 text-[12px] text-secondary tracking-widest uppercase">
-                Already a member?
-                <Link to="/login" className="text-primary font-medium hover:opacity-50 transition-opacity ml-2">
-                  Sign In
+              <div className="mt-6 text-center text-sm text-muted-foreground">
+                Already have an account? 
+                <Link to="/login" className="text-foreground font-semibold hover:underline underline-offset-4 ml-1">
+                  Sign in
                 </Link>
               </div>
             </div>
@@ -277,7 +247,7 @@ const Auth = ({ mode }) => {
 
         </div>
       </div>
-      
+
     </div>
   );
 };

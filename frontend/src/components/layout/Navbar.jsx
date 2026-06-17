@@ -1,132 +1,124 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
   const token = localStorage.getItem('token');
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const isStaff = localStorage.getItem('is_staff') === 'true';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setMobileOpen(false);
-    navigate('/login');
+    localStorage.removeItem('is_staff');
+    navigate('/');
   };
 
-  const isActive = (path) =>
-    location.pathname === path ||
-    (path === '/events' && location.pathname === '/');
-
-  const navLink = (path, label) => {
-    const active = isActive(path);
-    return (
-      <Link
-        to={path}
-        onClick={() => setMobileOpen(false)}
-        className="relative group text-[12px] font-medium uppercase tracking-[0.15em] px-2 py-1 transition-colors duration-500"
-        style={{ color: active ? '#111111' : '#999999' }}
-      >
-        {label}
-        {/* Subtle Underline Animation */}
-        <span 
-          className={`absolute left-0 bottom-0 h-[1px] bg-[#111111] transition-all duration-500 
-            ${active ? 'w-full' : 'w-0 group-hover:w-full'}`}
-        />
-      </Link>
-    );
-  };
+  const isDarkSection = location.pathname === '/' && !scrolled;
 
   return (
-    <nav
-      className="sticky top-0 z-50 bg-background"
+    <nav 
+      className={`fixed top-0 w-full z-50 transition-all duration-500 border-b ${
+        scrolled 
+          ? 'bg-background/90 backdrop-blur-md border-border py-4' 
+          : 'bg-transparent border-transparent py-6'
+      }`}
     >
-      <div className="w-full px-8 md:px-16 py-8">
-        <div className="flex items-center justify-between">
-
-          {/* Logo */}
-          <Link to="/" className="flex items-center group">
-            <span className="text-[14px] font-semibold text-primary tracking-[0.2em] uppercase">
-              EventFlow
-            </span>
-          </Link>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-10">
-            {navLink('/events', 'Events')}
-            {token && navLink('/my-registrations', 'My Registrations')}
-          </div>
-
-          {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-8">
-            {token ? (
-              <button
-                onClick={handleLogout}
-                className="text-[12px] font-medium uppercase tracking-[0.15em] text-primary opacity-40 hover:opacity-100 transition-opacity duration-500"
-              >
-                Sign Out
-              </button>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="text-[12px] font-medium uppercase tracking-[0.15em] text-primary opacity-40 hover:opacity-100 transition-opacity duration-500"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="text-[12px] font-medium uppercase tracking-[0.15em] text-background bg-primary px-6 py-3 hover:bg-neutral-800 transition-colors duration-500"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-[12px] font-medium tracking-[0.15em] uppercase text-primary opacity-60 hover:opacity-100 px-2 py-1 transition-opacity duration-500"
-            aria-label="Toggle menu"
+      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
+        
+        {/* Brand (Left) */}
+        <div className="flex-1">
+          <Link 
+            to="/" 
+            className={`text-sm md:text-base font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-80 ${
+              isDarkSection ? 'text-white' : 'text-foreground'
+            }`}
           >
-            {mobileOpen ? 'Close' : 'Menu'}
-          </button>
+            EVENTFLOW
+          </Link>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden absolute w-full h-screen bg-background top-full left-0 z-40 flex flex-col justify-center items-center gap-8">
-          {navLink('/events', 'Events')}
-          {token && navLink('/my-registrations', 'My Registrations')}
-          <div className="w-12 h-px bg-border my-4" />
-          {token ? (
-            <button
-              onClick={handleLogout}
-              className="text-[12px] font-medium uppercase tracking-[0.15em] text-primary opacity-40 hover:opacity-100 transition-opacity duration-500"
+        {/* Links (Center) */}
+        <div className="hidden md:flex flex-1 justify-center items-center gap-10">
+          <Link 
+            to="/" 
+            className={`text-xs font-semibold tracking-widest uppercase transition-colors pb-1 border-b-2 ${
+              location.pathname === '/' 
+                ? (isDarkSection ? 'border-white text-white' : 'border-foreground text-foreground') 
+                : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            EVENTS
+          </Link>
+          
+          {token && (
+            <Link 
+              to="/my-registrations" 
+              className={`text-xs font-semibold tracking-widest uppercase transition-colors pb-1 border-b-2 ${
+                location.pathname === '/my-registrations' 
+                  ? (isDarkSection ? 'border-white text-white' : 'border-foreground text-foreground') 
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
             >
-              Sign Out
-            </button>
-          ) : (
-            <div className="flex flex-col items-center gap-8">
-              <Link
-                to="/login"
-                onClick={() => setMobileOpen(false)}
-                className="text-[12px] font-medium uppercase tracking-[0.15em] text-primary opacity-40 hover:opacity-100 transition-opacity duration-500"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMobileOpen(false)}
-                className="text-[12px] font-medium uppercase tracking-[0.15em] text-background bg-primary px-8 py-4 hover:bg-neutral-800 transition-colors duration-500"
-              >
-                Register
-              </Link>
-            </div>
+              MY REGISTRATIONS
+            </Link>
+          )}
+
+          {isStaff && (
+            <Link 
+              to="/admin/dashboard" 
+              className={`text-xs font-semibold tracking-widest uppercase transition-colors pb-1 border-b-2 ${
+                location.pathname.startsWith('/admin') 
+                  ? (isDarkSection ? 'border-white text-white' : 'border-foreground text-foreground') 
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              ADMIN
+            </Link>
           )}
         </div>
-      )}
+
+        {/* Auth / Actions (Right) */}
+        <div className="flex flex-1 justify-end items-center gap-6">
+          {token ? (
+            <button 
+              onClick={handleLogout}
+              className={`text-xs font-semibold tracking-widest uppercase transition-colors ${
+                isDarkSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              SIGN OUT
+            </button>
+          ) : (
+            <>
+              <Link 
+                to="/login" 
+                className={`text-xs font-semibold tracking-widest uppercase transition-colors ${
+                  isDarkSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                LOG IN
+              </Link>
+              <Link 
+                to="/register" 
+                className={`text-xs font-semibold tracking-widest uppercase transition-colors ${
+                  isDarkSection ? 'text-white/80 hover:text-white' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                REGISTER
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };
