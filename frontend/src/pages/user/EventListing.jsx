@@ -4,6 +4,7 @@ import EventCard from '../../components/features/EventCard';
 import Loader from '../../components/common/Loader';
 import Button from '../../components/common/Button';
 import { Search } from 'lucide-react';
+import heroBg from '../../assets/hero-bg.png';
 
 const EventListing = () => {
   const [events, setEvents] = useState([]);
@@ -39,7 +40,7 @@ const EventListing = () => {
       {/* ─── Editorial Hero ─── */}
       <section 
         className="relative w-full px-6 md:px-12 lg:px-24 border-b border-border min-h-[600px] lg:min-h-[800px] bg-cover bg-center bg-no-repeat flex flex-col justify-end pb-16 md:pb-24"
-        style={{ backgroundImage: "url('/src/assets/hero-bg.png')" }}
+        style={{ backgroundImage: `url(${heroBg})` }}
       >
         <div className="max-w-5xl mx-auto w-full flex flex-col items-center text-center animate-fade-in-up">
           {/* Search */}
